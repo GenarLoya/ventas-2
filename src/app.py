@@ -4,13 +4,14 @@ import mlxtend
 from mlxtend.frequent_patterns import association_rules, apriori
 from mlxtend.frequent_patterns import fpgrowth
 
-df = pd.read_csv('ventas.csv')
+df = pd.read_csv('data_groceries.csv')
 print("------HEAD------")
 print("Size of the dataframe: {}".format(df.shape))
+df["amount"] = 1
 print(df.head())
 
 print("------PREPROCESSING------")
-df_pivot = df.pivot_table(index='transaction_number',
+df_pivot = df.pivot_table(index='id_compra',
                           columns='item', values='amount', aggfunc="sum").fillna(0).astype(int)
 
 print("Size of the pivot table: {}".format(df_pivot.shape))
@@ -40,5 +41,5 @@ min_treshold = 1
 rules = association_rules(frequent_items, metric=metric,
                           min_threshold=min_treshold)
 rules.reset_index(drop=True).sort_values(
-    by='confidence', ascending=False, inplace=True)
-print(rules)
+    by='confidence', ascending=True, inplace=True)
+print(rules.head())
